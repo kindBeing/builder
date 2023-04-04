@@ -1,6 +1,5 @@
 // @flow
 
-import expect from 'expect'
 import {getDefaultValues} from '../src/getDefaultValues';
 
 describe('getDefaultValues', function () {

@@ -4,7 +4,11 @@
 [include]
 
 [libs]
+./flow-typed
+./declarations
 
 [options]
-emoji=true
-module.system=haste
+
+[declarations]
+declare var describe: any;
+declare var it: any;

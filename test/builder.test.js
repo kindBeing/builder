@@ -1,9 +1,8 @@
 // @flow
 
 import {buildObject} from '../src/builder';
-import type {DataType} from '../src/types';
+import type {DataType, OptionalDataType} from '../src/types';
 import {Schema} from 'mongoose';
-import expect from 'expect';
 
 describe('builder', function () {
     const UserSchema = new Schema({
@@ -13,7 +12,7 @@ describe('builder', function () {
         address: { type: String, required: true },
     });
 
-    const UserType: Record<string, DataType | `${DataType}?`> = {
+    const UserType: $ReadOnly<{ [key: string]: DataType | OptionalDataType }> = {
         id: 'String',
         name: 'String',
         age: 'Number?',

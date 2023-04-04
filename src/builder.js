@@ -1,7 +1,7 @@
 // @flow
 
 import { getDefaultValues } from './getDefaultValues';
-import type { DataType } from './types';
+import type {DataType, MongooseSchema, OptionalDataType} from './types';
 import type { Schema } from 'mongoose';
 
 /**
@@ -10,14 +10,8 @@ import type { Schema } from 'mongoose';
  * The `?` represents that the property is optional.
  */
 type FlowTypeSchema = {
-    [key: string]: DataType | `${DataType}?`;
+    [key: string]: DataType | OptionalDataType;
 };
-
-/**
- * Represents a Mongoose schema.
- * Defined as `mongoose.Schema` to ensure better type safety.
- */
-type MongooseSchema = Schema;
 
 const handleSchema = (schema: MongooseSchema): { [key: string]: any } => {
     let result = {};
@@ -25,11 +19,32 @@ const handleSchema = (schema: MongooseSchema): { [key: string]: any } => {
         if (key === '_id' || key === '__v') continue;
         if (schema.paths[key].schema) {
             result[key] = buildObject(schema.paths[key].schema);
-        } else if (schema.paths[key].isRequired || schema.paths[key].options.required) {
-            result[key] = getDefaultValues(schema.paths[key].instance);
         }
+        // Handling of required fields for later
+        // else if (schema.paths[key].isRequired || schema.paths[key].options.required) {
+        result[key] = getDefaultValues(schema.paths[key].instance);
+        // }
     }
     return result;
+};
+
+const buildNestedObject = (nestedSchema: FlowTypeSchema): { [key: string]: any } => {
+    let nestedResult = {};
+    for (let key in nestedSchema) {
+        let value = nestedSchema[key];
+        let isRequired = !value.endsWith('?');
+        // // Returns standard data type by stripping the question mark
+        let dataType: DataType = isRequired ? ((value: any): DataType) : ((value.slice(0, -1): any): DataType);
+
+        if (dataType === 'Object') {
+            nestedResult[key] = buildNestedObject((nestedSchema[key]: any));
+        }
+        // Handling of required fields for later
+        // else if (isRequired) {
+        nestedResult[key] = getDefaultValues(dataType);
+        // }
+    }
+    return nestedResult;
 };
 
 /**
@@ -44,22 +59,6 @@ function buildObject(schema: MongooseSchema | FlowTypeSchema): { [key: string]: 
     }
 
     let result = {};
-
-    const buildNestedObject = (nestedSchema: FlowTypeSchema): { [key: string]: any } => {
-        let nestedResult = {};
-        for (let key in nestedSchema) {
-            let value = nestedSchema[key];
-            let isRequired = !value.endsWith('?');
-            let dataType: DataType = isRequired ? ((value: any): DataType) : ((value.slice(0, -1): any): DataType);
-
-            if (dataType === 'Object') {
-                nestedResult[key] = buildNestedObject((nestedSchema[key]: any));
-            } else if (isRequired) {
-                nestedResult[key] = getDefaultValues(dataType);
-            }
-        }
-        return nestedResult;
-    };
 
     if (schema.constructor.name === 'Schema') {
         // Handle Mongoose schema
