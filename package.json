@@ -1,0 +1,28 @@
+{
+  "name": "builder",
+  "version": "1.0.0",
+  "description": "builder for javascript",
+  "main": "src/builder.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "flow": "flow",
+    "typecheck": "tsc",
+    "test": "mocha --require esm"
+  },
+  "dependencies": {
+    "expect": "^29.5.0",
+    "express": "^4.17.1",
+    "mongoose": "^7.0.3",
+    "node": "^19.8.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^9.0.0",
+    "esm": "^3.2.25",
+    "flow-bin": "^0.161.0",
+    "mocha": "^9.2.0",
+    "typescript": "^4.5.4"
+  },
+  "author": "kindBeing",
+  "license": "ISC"
+}
