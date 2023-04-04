@@ -1,7 +1,7 @@
 // @flow
 
-import {buildObject} from '../src/builder.js';
-import type {DataType} from '../src/getDefaultValues';
+import {buildObject} from '../src/builder';
+import type {DataType} from '../src/types';
 import {Schema} from 'mongoose';
 import expect from 'expect';
 

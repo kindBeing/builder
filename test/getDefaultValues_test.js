@@ -1,17 +1,15 @@
 // @flow
 
 import expect from 'expect'
-import {DataType, getDefaultValues} from '../src/getDefaultValues.js';
-
-// ... (previous test code)
+import {getDefaultValues} from '../src/getDefaultValues';
 
 describe('getDefaultValues', function () {
     it('getDefaultValues should return appropriate default values', () => {
-        expect(getDefaultValues(DataType.String)).toBe('');
-        expect(getDefaultValues(DataType.Number)).toBe(0);
-        expect(getDefaultValues(DataType.Boolean)).toBe(false);
-        expect(getDefaultValues(DataType.Array)).toEqual([]);
-        expect(getDefaultValues(DataType.Object)).toEqual({});
-        expect(getDefaultValues(DataType.Date)).toBeInstanceOf(Date);
+        expect(getDefaultValues('String')).toBe('');
+        expect(getDefaultValues('Number')).toBe(0);
+        expect(getDefaultValues('Boolean')).toBe(false);
+        expect(getDefaultValues('Array')).toEqual([]);
+        expect(getDefaultValues('Object')).toEqual({});
+        expect(getDefaultValues('Date')).toBeInstanceOf(Date);
     });
 });

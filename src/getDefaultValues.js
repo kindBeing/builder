@@ -1,13 +1,6 @@
 // @flow
 
-export enum DataType {
-    String = 'String',
-    Number = 'Number',
-    Date = 'Date',
-    Boolean = 'Boolean',
-    Array = 'Array',
-    Object = 'Object',
-}
+import type {DataType} from "./types.js";
 
 /**
  * Returns the default value for the given data type.
@@ -17,17 +10,17 @@ export enum DataType {
  */
 export function getDefaultValues(dataType: DataType): any {
     switch (dataType) {
-        case DataType.String:
+        case 'String':
             return '';
-        case DataType.Number:
+        case 'Number':
             return 0;
-        case DataType.Date:
+        case 'Date':
             return new Date();
-        case DataType.Boolean:
+        case 'Boolean':
             return false;
-        case DataType.Array:
+        case 'Array':
             return [];
-        case DataType.Object:
+        case 'Object':
             return {};
         default:
             return null;
