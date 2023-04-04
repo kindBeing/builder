@@ -2,7 +2,7 @@
 
 import { getDefaultValues } from './getDefaultValues.js';
 import type { DataType } from './getDefaultValues.js';
-import mongoose from 'mongoose';
+import type { Schema } from 'mongoose';
 
 /**
  * Represents a flow type or interface schema.
@@ -17,7 +17,7 @@ type FlowTypeSchema = {
  * Represents a Mongoose schema.
  * Defined as `mongoose.Schema` to ensure better type safety.
  */
-type MongooseSchema = mongoose.Schema;
+type MongooseSchema = Schema;
 
 /**
  * Generates an object with default values based on the provided Mongoose schema or flow type/interface schema.
