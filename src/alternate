@@ -1,0 +1,62 @@
+// @flow
+import type { DataType, getDefaultValues } from './data-types';
+import type { Schema } from 'mongoose';
+
+type OptionalDataType = 'String?' | 'Number?' | 'Date?' | 'Boolean?' | 'Array?' | 'Object?';
+
+type FlowTypeSchema = {
+  [key: string]: DataType | OptionalDataType,
+};
+
+type MongooseSchema = Schema;
+
+type FlowTypes = {
+  number: 'Number',
+  string: 'String',
+  Date: 'Date',
+  boolean: 'Boolean',
+  Array: 'Array',
+  Object: 'Object',
+};
+
+const flowTypeToDataType = (flowType: $Keys<FlowTypes>): DataType => {
+  return (FlowTypes[flowType]: any);
+};
+
+const handleSchema = (schema: MongooseSchema): { [key: string]: any } => {
+  // ...
+};
+
+/**
+ * Generates an object with default values based on the provided Mongoose schema or Flow type/interface schema.
+ *
+ * @param {MongooseSchema | FlowTypeSchema} schema - The Mongoose schema or Flow type/interface schema.
+ * @returns {object} The generated object with default values based on the provided schema.
+ */
+function buildObject(schema: MongooseSchema | {[key: string]: mixed}): { [key: string]: any } {
+  if (typeof schema !== 'object') {
+    throw new Error('Invalid schema provided');
+  }
+
+  // ...
+
+  if (schema.constructor.name === 'Schema') {
+    // Handle Mongoose schema
+    result = handleSchema((schema: any));
+  } else {
+    // Convert Flow types to DataType format
+    const convertedSchema: FlowTypeSchema = Object.entries(schema).reduce((acc, [key, value]) => {
+      const isOptional = key.endsWith('?');
+      const dataType = flowTypeToDataType((isOptional ? key.slice(0, -1) : key): any);
+      acc[key] = isOptional ? `${dataType}?` : dataType;
+      return acc;
+    }, {});
+
+    // Handle flow type or interface
+    result = buildNestedObject(convertedSchema);
+  }
+
+  return result;
+}
+
+export { buildObject };
